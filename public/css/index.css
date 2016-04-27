@@ -1,0 +1,58 @@
+body{
+    background:#36b0b6;
+    text-align: center;
+}
+
+h1{
+    text-align: center;
+}
+
+h3{
+    text-align:center;
+}
+
+form{
+    max-width: 350px;
+    max-height:400px;
+    margin:10px auto;
+    padding: 10px 20px;
+    background: #f4f7f8;
+    border-radius: 8px;
+}
+input[type="text"],
+input[type="password"],
+input[type="radio"],
+textarea,
+
+select {
+    border: none;
+    font-size: 16px;
+    padding: 15px;
+    height:10px;
+    width: 80%;
+    background-color:#ccd2cc;
+    color: blue;
+}
+
+select {
+    padding: 6px;
+    height: 32px;
+    border-radius: 2px;
+}
+
+fieldset {
+    margin-bottom: 30px;
+    border: none;
+}
+
+footer {
+    margin-top: 20px;
+    width: 100%;
+    position: fixed;
+    opacity: 0.3;
+    bottom: 0;
+    left: 0;
+    background-color: black;
+    color:white;
+    text-align: center;
+}
