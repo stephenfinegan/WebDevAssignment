@@ -1,0 +1,33 @@
+nav ul {
+    display: flex;
+    list-style-type: none;
+    padding:10px;
+
+}
+
+nav li {
+    border-radius: 5px;
+    width:100%;
+}
+
+nav a {
+    border-radius: 5px;
+    display: block;
+    text-align: center;
+    text-decoration: none;
+    color:black;
+    padding:15px;
+    border:1px solid black;
+    line-height: 1;
+}
+
+nav a:active{
+    color:red;
+}
+
+nav a:hover {
+    border: 1px solid #36b0b6;
+}
+
+
+
