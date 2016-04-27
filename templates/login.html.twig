@@ -1,0 +1,19 @@
+{% extends '_base.html.twig' %}
+
+{% block pageTitle %}{{ title }}{% endblock %}
+
+{% block main %}
+    <h1>
+        LOGIN HERE!
+    </h1>
+    <hr color="black">
+    <fieldset class="loginFieldset">
+        <form id="loginForm" method="post" action="/loginForm">
+            <h3>Login Form</h3>
+            <label>USERNAME</label> <input type="text" name="username" id="username" required>
+            <label>PASSWORD</label> <input type="password" name="password" id="password" required>
+            <br>
+            <br><input type="submit" value="LOGIN">
+        </form>
+    </fieldset>
+{% endblock %}
