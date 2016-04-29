@@ -8,6 +8,7 @@
  * based on PDO tutorial at URL:
  * http://culttt.com/2012/10/01/roll-your-own-pdo-php-class/
  */
+namespace StephenFinegan;
 
 class DatabaseManager
 {

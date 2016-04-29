@@ -6,8 +6,10 @@
  * Time: 17:10
  */
 
-namespace StephenFinegan;
+namespace StephenFinegan\Controllers;
 
+use StephenFinegan\Models\User;
+use StephenFinegan\Models\Job;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -33,7 +35,6 @@ class MainController
     public function registerAction(Request $request, Application $app){
         $isLoggedIn = $this->isLoggedInFromSession();
         $username = $this->usernameFromSession();
-
         $argsArray = [
             'title' => 'Register',
             'isLoggedIn' => $isLoggedIn,
@@ -44,19 +45,50 @@ class MainController
         return $app['twig']->render($templateName . '.html.twig', $argsArray);
     }
 
-    public function loginAction(Request $request, Application $app){
+    public function loginAction(Application $app){
         $isLoggedIn = $this->isLoggedInFromSession();
-        $username = $this->usernameFromSession();
-
         $argsArray = [
             'title' => 'Login',
-            'isLoggedIn' => $isLoggedIn,
-            'username' => $username
+            'isLoggedIn' => $isLoggedIn
         ];
         // template for login page
         $templateName = 'login';
         return $app['twig']->render($templateName . '.html.twig', $argsArray);
     }
+
+    public function accountAction(Request $request, Application $app)
+    {
+        $isLoggedIn = $this->isLoggedInFromSession();
+        $username = $this->usernameFromSession();
+        $position = $this->positionFromSession();
+
+        $argsArray = [
+            'title' => 'Account',
+            'isLoggedIn' => $isLoggedIn,
+            'username' => $username,
+            'position' => $position
+        ];
+
+        // template for index page
+        $templateName = 'account';
+        return $app['twig']->render($templateName . '.html.twig', $argsArray);
+    }
+
+    public function logoutAction(Request $request, Application $app)
+    {
+        // logout user
+        unset($_SESSION['user']);
+
+        $argsArray = array(
+            'title' => 'Home page',
+        );
+
+        // render (draw) template
+        // ------------
+        $templateName = 'index';
+        return $app['twig']->render($templateName . '.html.twig', $argsArray);
+    }
+
    public function processLoginAction(Request $request, Application $app){
        $username = $request->get('username');
        $password = $request->get('password');
@@ -84,7 +116,7 @@ class MainController
            $argsArray = array(
                'title' => 'Login',
                'isLoggedIn' => $isLoggedIn,
-               'loginError' => 'unsuccessful, please try again.'
+               'message' => 'unsuccessful, please try again'
            );
 
            return $app['twig']->render($templateName . '.html.twig', $argsArray);
@@ -109,12 +141,13 @@ class MainController
         User::insert($firstname, $surname, $username, $password, $makePosition);
 
         $templateName = 'index';
-        $argsArray = array(
+        $argsArray = [
             'title' => 'Home',
+            'message' => 'login here',
             'username' => $username,
             'isLoggedIn' => $this->isLoggedInFromSession(),
-            'successMessage' =>"You successfully registered"
-        );
+            'successMessage' =>"You successfully registered as $username"
+        ];
 
         return $app['twig']->render($templateName . '.html.twig', $argsArray);
     }
@@ -141,6 +174,16 @@ class MainController
         }
 
         return $username;
+    }
+
+    public function positionFromSession()
+    {
+        if (isset($_SESSION['user'])) {
+            $username = $this->usernameFromSession();
+            $user = User::getOneByUsername($username);
+            $position = $user->getPosition();
+        }
+        return intval($position);
     }
     public static function error(Application $app, $message, $heading)
     {

@@ -6,7 +6,7 @@
  * Time: 17:20
  */
 
-namespace StephenFinegan;
+namespace StephenFinegan\Models;
 
 use Mattsmithdev\PdoCrud\DatabaseTable;
 use Mattsmithdev\PdoCrud\DatabaseManager;
@@ -22,6 +22,7 @@ class User extends DatabaseTable{
     private $surname;
     private $username;
     private $password;
+    private $hashedPassword;
     private $position;
 
     /**
@@ -35,23 +36,20 @@ class User extends DatabaseTable{
     {
         $db = new DatabaseManager();
         $connection = $db->getDbh();
-        // $user = new User();
-        $sql = "INSERT INTO users VALUES (NULL, :firstname, :surname, :username, :password, :position)";
+        $user = new User();
+        $user->setHashedPassword($password);
+        $hashedPassword = $user->getHashedPassword();
+
+        $sql = "INSERT INTO users VALUES (NULL, :firstname, :surname, :username, :password, :hashedPassword, :position)";
         $statement = $connection->prepare($sql);
         $statement->bindParam(':firstname', $firstname, \PDO::PARAM_STR);
         $statement->bindParam(':surname', $surname, \PDO::PARAM_STR);
         $statement->bindParam(':username', $username, \PDO::PARAM_STR);
         $statement->bindParam(':password', $password, \PDO::PARAM_STR);
+        $statement->bindParam(':hashedPassword', $hashedPassword, \PDO::PARAM_STR);
         $statement->bindParam(':position', $position, \PDO::PARAM_STR);
         $statement->setFetchMode(\PDO::FETCH_CLASS, __CLASS__);
         $statement->execute();
-
-        $queryWasSuccessful = ($statement->rowCount() > 0);
-        if($queryWasSuccessful) {
-            return $connection->lastInsertId();
-        } else {
-            return 1;
-        }
     }
 
     public static function canFindMatchingUsernameAndPassword($username, $password)
@@ -62,7 +60,7 @@ class User extends DatabaseTable{
             return false;
         }
 
-        $hashedStoredPassword = $user->getPassword();
+        $hashedStoredPassword = $user->getHashedPassword();
 
         return password_verify($password, $hashedStoredPassword);
     }
@@ -130,14 +128,19 @@ class User extends DatabaseTable{
         $this->password = $password;
     }
 
+    public function getHashedPassword()
+    {
+        return $this->hashedPassword;
+    }
+
+    public function setHashedPassword($password)
+    {
+        $this->hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+    }
+
     public function getPosition()
     {
         return $this->position;
     }
-
-    public function setPosition($position){
-        $this->position = $position;
-    }
-
 
 }
