@@ -1,6 +1,8 @@
 {
   "autoload":{
     "psr-4":{
+      "StephenFinegan\\Controllers\\":"src/controllers",
+      "StephenFinegan\\Models\\":"src/models",
       "StephenFinegan\\":"src/"
     }
   },
