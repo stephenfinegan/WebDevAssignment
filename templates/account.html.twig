@@ -1,0 +1,36 @@
+{% extends '_base.html.twig' %}
+
+{% block pageTitle %}{{ title }}{% endblock %}
+
+{% block main %}
+    <h1>
+        WELCOME TO YOUR ACCOUNT!
+    </h1>
+    <hr color="black">
+    {{ worked }}
+    {% if position == 3 %}
+
+        <fieldset class="registerFieldset">
+            <form id="jobForm" method="post" action="/jobForm">
+                <h1>Enter job information</h1>
+                <input type="text" name="company" placeholder="COMPANY" required>
+                <br>
+                <br>
+                <input type="text" name="position" placeholder="POSITION">
+                <br>
+                <br>
+                <textarea name="description" id="jobDescTextArea" placeholder="DESCRIPTION" required></textarea>
+                <br>
+                <br>
+                <input type="date" name="date" required> <input type="time" name="time" required>
+                <br>
+                <br>
+                <input type="submit" value="Submit Job">
+            </form>
+        </fieldset>
+    {% elseif position == 1 %}
+
+    {% else %}
+
+    {% endif %}
+{% endblock %}

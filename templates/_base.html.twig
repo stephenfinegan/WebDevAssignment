@@ -10,46 +10,46 @@
  </head>
 <body>
 {% if isLoggedIn == false %}
- <nav>
-    <ul>
-        <li>
-            <a href="/">Home</a>
-        </li>
-        <li>
-            <a href="/students">Students</a>
-        </li>
-        <li>
-            <a href="/jobs">Jobs</a>
-        </li>
-        <li>
-            <a href="/register">Register</a>
-        </li>
-        <li>
-            <a href="/login">Login</a>
-        </li>
-    </ul>
-</nav>
+     <nav>
+        <ul>
+            <li>
+                <a href="/">Home</a>
+            </li>
+            <li>
+                <a href="/students">Students</a>
+            </li>
+            <li>
+                <a href="/jobs">Jobs</a>
+            </li>
+            <li>
+                <a href="/register">Register</a>
+            </li>
+            <li>
+                <a href="/login">Login</a>
+            </li>
+        </ul>
+    </nav>
 {% else %}
-    {{ username }} logged in
-<nav>
-    <ul>
-        <li>
-            <a href="/">Home</a>
-        </li>
-        <li>
-            <a href="/students">Students</a>
-        </li>
-        <li>
-            <a href="/jobs">Jobs</a>
-        </li>
-        <li>
-            <a href="/logout">Logout</a>
-        </li>
-        <li>
-            <a href="/account">Account</a>
-        </li>
-    </ul>
-</nav>
+    {{ username }} is logged in
+    <nav>
+        <ul>
+            <li>
+                <a href="/">Home</a>
+            </li>
+            <li>
+                <a href="/students">Students</a>
+            </li>
+            <li>
+                <a href="/jobs">Jobs</a>
+            </li>
+            <li>
+                <a href="/logout">Logout</a>
+            </li>
+            <li>
+                <a href="/account">Account</a>
+            </li>
+        </ul>
+    </nav>
 {% endif %}
 <main>
     {% block main %}
