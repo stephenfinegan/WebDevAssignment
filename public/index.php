@@ -6,16 +6,19 @@
  * Time: 16:56
  */
 session_start();
-use StephenFinegan\MainController;
+use StephenFinegan\Controllers\MainController;
 
 require_once __DIR__ . '/../app/setup.php';
 
-$app->get('/', controller('StephenFinegan', 'main/index'));
+$app->get('/', controller('StephenFinegan\Controllers', 'main/index'));
 
-$app->get('/register', controller('StephenFinegan', 'main/register'));
-$app->get('/login', controller('StephenFinegan', 'main/login'));
-$app->post('/loginForm', controller('StephenFinegan', 'main/processLogin'));
-$app->post('/registerForm', controller('StephenFinegan', 'main/registerUser'));
+$app->get('/register', controller('StephenFinegan\Controllers', 'main/register'));
+$app->get('/login', controller('StephenFinegan\Controllers', 'main/login'));
+$app->get('/logout', controller('StephenFinegan\Controllers', 'main/logout'));
+$app->get('/account', controller('StephenFinegan\Controllers', 'main/account'));
+$app->post('/loginForm', controller('StephenFinegan\Controllers', 'main/processLogin'));
+$app->post('/registerForm', controller('StephenFinegan\Controllers', 'main/registerUser'));
+$app->post('/jobForm', controller('StephenFinegan\Controllers', 'job/makeJob'));
 
 
 $app->error(function (\Exception $e, $code) use ($app) {
@@ -23,11 +26,11 @@ $app->error(function (\Exception $e, $code) use ($app) {
         case 404:
             $heading = 'ERROR';
             $message = 'Requested page could not be found.';
-            return \StephenFinegan\MainController::error($app, $message, $heading);
+            return \StephenFinegan\Controllers\MainController::error($app, $message, $heading);
         default:
             $heading = 'ERROR';
             $message = 'Something went wrong.';
-            return \StephenFinegan\MainController::error($app, $message, $heading);
+            return \StephenFinegan\Controllers\MainController::error($app, $message, $heading);
     }
 });
 
