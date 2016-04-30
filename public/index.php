@@ -16,9 +16,13 @@ $app->get('/register', controller('StephenFinegan\Controllers', 'main/register')
 $app->get('/login', controller('StephenFinegan\Controllers', 'main/login'));
 $app->get('/logout', controller('StephenFinegan\Controllers', 'main/logout'));
 $app->get('/account', controller('StephenFinegan\Controllers', 'main/account'));
+$app->get('/jobs', controller('StephenFinegan\Controllers', 'main/jobs'));
+
 $app->post('/loginForm', controller('StephenFinegan\Controllers', 'main/processLogin'));
 $app->post('/registerForm', controller('StephenFinegan\Controllers', 'main/registerUser'));
 $app->post('/jobForm', controller('StephenFinegan\Controllers', 'job/makeJob'));
+$app->post('/deleteJob', controller('StephenFinegan\Controllers', 'job/deleteJob'));
+
 
 
 $app->error(function (\Exception $e, $code) use ($app) {

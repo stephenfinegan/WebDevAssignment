@@ -60,3 +60,7 @@ footer {
 #jobDescTextArea{
     height: 100px;
 }
+
+#viewJobsTable{
+    border: 1px solid black;
+}
