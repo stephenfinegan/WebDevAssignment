@@ -26,11 +26,6 @@ class Job extends DatabaseTable {
         return $this->id;
     }
 
-    public function setId($id)
-    {
-        $this->id = $id;
-    }
-
     public function getUsername()
     {
         return $this->username;
@@ -51,7 +46,7 @@ class Job extends DatabaseTable {
         $this->company = $company;
     }
 
-    public function getTitile(){
+    public function getTitle(){
         return $this->title;
     }
 
@@ -122,6 +117,41 @@ class Job extends DatabaseTable {
 
         if ($object = $statement->fetch()) {
             return $object;
+        } else {
+            return null;
+        }
+    }
+
+    public static function getOneById($id)
+    {
+        $db = new DatabaseManager();
+        $connection = $db->getDbh();
+
+        $sql = 'SELECT * FROM jobs WHERE id=:id';
+        $statement = $connection->prepare($sql);
+        $statement->bindParam(':id', $id, \PDO::PARAM_STR);
+        $statement->setFetchMode(\PDO::FETCH_CLASS,'\\StephenFinegan\\Models\\Job');
+        $statement->execute();
+
+        if ($job = $statement->fetch()) {
+            return $job;
+        } else {
+            return null;
+        }
+    }
+
+    public static function removeOneById($id){
+        $db = new DatabaseManager();
+        $connection = $db->getDbh();
+
+        $sql = 'DELETE FROM jobs WHERE id=:id';
+        $statement = $connection->prepare($sql);
+        $statement->bindParam(':id', $id, \PDO::PARAM_STR);
+        $statement->setFetchMode(\PDO::FETCH_CLASS,'\\StephenFinegan\\Models\\Job');
+        $statement->execute();
+
+        if ($statement->fetch()) {
+            return true;
         } else {
             return null;
         }

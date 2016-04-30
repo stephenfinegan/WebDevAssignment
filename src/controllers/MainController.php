@@ -56,14 +56,36 @@ class MainController
         return $app['twig']->render($templateName . '.html.twig', $argsArray);
     }
 
+    public function jobsAction(Request $request, Application $app)
+    {
+        $isLoggedIn = $this->isLoggedInFromSession();
+        $username = $this->usernameFromSession();
+        $position = $this->positionFromSession();
+
+        $allJobs = Job::getAll();
+
+        $templateName = 'jobs';
+        $argsArray = array(
+            'title' => "List of jobs",
+            'jobs' => $allJobs,
+            'isLoggedIn' => $isLoggedIn,
+            'username' => $username,
+            'position' => $position
+        );
+        return $app['twig']->render($templateName . '.html.twig', $argsArray);
+    }
+
     public function accountAction(Request $request, Application $app)
     {
         $isLoggedIn = $this->isLoggedInFromSession();
         $username = $this->usernameFromSession();
         $position = $this->positionFromSession();
 
+        $allJobs = Job::getAll();
+
         $argsArray = [
             'title' => 'Account',
+            'jobs' => $allJobs,
             'isLoggedIn' => $isLoggedIn,
             'username' => $username,
             'position' => $position

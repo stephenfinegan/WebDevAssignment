@@ -53,6 +53,37 @@ class JobController {
             return $app['twig']->render($templateName . '.html.twig', $argsArray);
     }
 
+    public function deleteJobAction(Request $request, Application $app)
+    {
+
+        $isLoggedIn = $this->isLoggedInFromSession();
+        $username = $this->usernameFromSession();
+        $position = $this->positionFromSession();
+        $id = $request->get('id');
+
+        $jobs = Job::getOneByUsername($username);
+        $everyJob = Job::getAll();
+        $deleteJob = Job::removeOneById($id);
+
+        if ($deleteJob == null) {
+            $worked = "Jod has been successfully deleted";
+        }else{
+            $failed = "Unable to delete job";
+        }
+        $templateName = 'account';
+        $argsArray = array(
+            'title' => 'Account',
+            'worked' => $worked,
+            'isLoggedIn' =>$isLoggedIn,
+            'username'=>$username,
+            'position'=>$position,
+            'jobs'=>$jobs,
+            'everyJob'=>$everyJob
+
+        );
+        return $app['twig']->render($templateName . '.html.twig', $argsArray);
+    }
+
     public function isLoggedInFromSession()
     {
         $isLoggedIn = false;
