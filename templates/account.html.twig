@@ -28,6 +28,39 @@
                 <input type="submit" value="Submit Job">
             </form>
         </fieldset>
+
+        <hr>
+        <h3>Available jobs</h3>
+        {% for job in jobs %}
+            <table id="viewJobsTable" align="center" id="viewJobsTable" border="1px">
+        <tr>
+            <th> Company </th>
+            <th> Title </th>
+            <th> Description </th>
+            <th> Deadline </th>
+        </tr>
+
+            <tr>
+                <td> {{ job.company }} </td>
+                <td> {{ job.title }} </td>
+                <td> {{ job.description }} </td>
+                <td> {{ job.deadline }} </td>
+                <td>
+                        <form action="/deleteJob" method="post">
+                            <input type="submit" value="Delete Job">
+                            <input type="hidden" value="{{ job.id }}" name="id">
+                        </form>
+                </td>
+            </tr>
+        </table>
+        <br>
+        <br>
+        {% else %}
+            There are no jobs
+            <br>
+            <br>
+        {% endfor %}
+
     {% elseif position == 1 %}
 
     {% else %}
