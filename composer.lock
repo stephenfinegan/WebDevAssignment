@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "84cb0d4f10a8e2ed84cfc750162afc6b",
+    "hash": "73335d6875bac54e7834d3aa2591f138",
     "content-hash": "a01e742b393152667756820ce9fb0106",
     "packages": [
         {
@@ -17,7 +17,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dr-matt-smith/pdo-crud-for-free/zipball/3bc278fab3967fdc559d97e039a569f2c86576b9",
+                "url": "https://api.github.com/repos/dr-matt-smith/pdo-crud-for-free/zipball/decceeb055f411d8058f2a3c7e25a88d2e83d67a",
                 "reference": "3bc278fab3967fdc559d97e039a569f2c86576b9",
                 "shasum": ""
             },

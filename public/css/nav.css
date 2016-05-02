@@ -1,3 +1,4 @@
+/*style for nav ul putting a padding around and displaying it as flex*/
 nav ul {
     display: flex;
     list-style-type: none;
@@ -5,11 +6,13 @@ nav ul {
 
 }
 
+/*styling nav li to have curved border and display it across whole page*/
 nav li {
     border-radius: 5px;
     width:100%;
 }
 
+/*styling navigation links display text in center of link, setting colour as black*/
 nav a {
     border-radius: 5px;
     display: block;
@@ -21,10 +24,7 @@ nav a {
     line-height: 1;
 }
 
-nav a:active{
-    color:red;
-}
-
+/* making border disappear when user hovers over link*/
 nav a:hover {
     border: 1px solid #36b0b6;
 }

@@ -5,6 +5,8 @@
  * Date: 13/04/2016
  * Time: 16:36
  */
+
+//constants for database config
 define('DB_HOST', 'localhost');
 define('DB_USER', 'stephen');
 define('DB_PASS', 'qwerty');

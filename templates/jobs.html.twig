@@ -7,32 +7,44 @@
         All JOBS!
     </h1>
     <hr color="black">
-
-    <table id="viewJobsTable" align="center" id="viewJobsTable" border="1px">
-    <tr>
-        <th> Company </th>
-        <th> Title </th>
-        <th> Description </th>
-        <th> Deadline </th>
-    </tr>
+    <div id="successMessage">
+        {{ worked }}
+    </div>
+    <div id="failMessage">
+        {{ failed }}
+    </div>
+    <br>
     {% for job in jobs %}
-            <tr>
-                <td> {{ job.company }} </td>
-                <td> {{ job.title }} </td>
-                <td> {{ job.description }} </td>
-                <td> {{ job.deadline }} </td>
-                <td>
-                    {% if position == 1 %}
-                    <form action="/apply/{{ job.id }}" method="post">
-                        <input type="submit" value="Apply">
-                    </form>
-                    {% else %}
+        {% if job.accepted == 1 %}
+            <table id="viewJobsTable" align="center" id="viewJobsTable" border="1px">
+            <br>
+                <tr>
+                    <th> Company </th>
+                    <th> Title </th>
+                    <th> Description </th>
+                    <th> Deadline </th>
+                </tr>
 
-                    {% endif %}
-                </td>
-            </tr>
-    {% else %}
-        There are no jobs
+                <tr>
+                    <td> {{ job.company }} </td>
+                    <td> {{ job.title }} </td>
+                    <td> {{ job.description }} </td>
+                    <td> {{ job.deadline }} </td>
+                    <td>
+                        {% if position == 1 %}
+                        <form action="/apply" method="post">
+                            <input type="submit" value="Apply">
+                            <input type="hidden" value="{{ job.id }}" name="id">
+                        </form>
+                        {% else %}
+
+                        {% endif %}
+                    </td>
+                </tr>
+        {% endif %}
+
+        {% else %}
+            There are no jobs
     {% endfor %}
-    </table>
+        </table>
 {% endblock %}

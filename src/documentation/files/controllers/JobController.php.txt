@@ -1,0 +1,330 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: Stephen
+ * Date: 29/04/2016
+ * Time: 10:53
+ */
+
+/**
+ * namespace for job controller
+ */
+namespace StephenFinegan\controllers;
+
+use StephenFinegan\Models\Job;
+use StephenFinegan\Models\User;
+use StephenFinegan\Models\Applicants;
+use StephenFinegan\Models\CV;
+use Silex\Application;
+use Symfony\Component\HttpFoundation\Request;
+
+/**
+ * controls all the functions involved with jobs
+ * Class JobController
+ * @package StephenFinegan\controllers
+ */
+class JobController
+{
+
+    /**
+     * Allows employer to create a job for students to apply for
+     * @param Request $request
+     * @param Application $app
+     * @return mixed
+     */
+    public function makeJobAction(Request $request, Application $app)
+    {
+        $isLoggedIn = $this->isLoggedInFromSession();
+        $username = $this->usernameFromSession();
+        $position = $this->positionFromSession();
+        $company = $request->get('company');
+        $title = $request->get('position');
+        $description = $request->get('description');
+        $date = $request->get('date');
+        $time = $request->get('time');
+        date_default_timezone_set('Europe/Dublin');
+        $deadline = strtotime("$date $time");
+
+        if ($isLoggedIn) {
+            $processJob = Job::insertJob($username, $company, $title, $description, $deadline);
+            $objects = Job::getOneByUsername($username);
+            $everyJob = Job::getAll();
+
+            if ($processJob == null) {
+                $worked = "Jod has been successfully added";
+            } else {
+                $failed = "Unable to add job";
+            }
+            $templateName = 'account';
+            $argsArray = array(
+                'title' => 'Account',
+                'worked' => $worked,
+                'isLoggedIn' => $isLoggedIn,
+                'username' => $username,
+                'position' => $position,
+                'objects' => $objects,
+                'everyJob' => $everyJob
+
+            );
+            return $app['twig']->render($templateName . '.html.twig', $argsArray);
+        } else {
+            $templateName = 'login';
+            $argsArray = array(
+                    'title' => 'Login',
+                    'failed' => 'Please login to apply to this job.'
+                );
+            return $app['twig']->render($templateName . '.html.twig', $argsArray);
+        }
+    }
+
+    /**
+     * Allows the employer or lecturer delete jobs that have been created by employer
+     * @param Request $request
+     * @param Application $app
+     * @return mixed
+     */
+    public function deleteJobAction(Request $request, Application $app)
+    {
+        $isLoggedIn = $this->isLoggedInFromSession();
+        $username = $this->usernameFromSession();
+        $position = $this->positionFromSession();
+        $id = $request->get('id');
+
+        if ($isLoggedIn) {
+            $deleteJob = Job::removeOneById($id);
+            $jobs = Job::getOneByUsername($username);
+            $everyJob = Job::getAll();
+
+
+            if ($deleteJob == true) {
+                $templateName = 'account';
+                $argsArray = array(
+                'worked' => 'Job has been deleted successfully',
+                'isLoggedIn' => $isLoggedIn,
+                'username' => $username,
+                'position' => $position,
+                'jobs' => $jobs,
+                'everyJob' => $everyJob
+            );
+            } else {
+                $templateName = 'account';
+                $argsArray = array(
+                'failed' => 'Sorry job has not been deleted',
+                'isLoggedIn' => $isLoggedIn,
+                'username' => $username,
+                'position' => $position,
+                'jobs' => $jobs,
+                'everyJob' => $everyJob
+            );
+            }
+
+            return $app['twig']->render($templateName . '.html.twig', $argsArray);
+        } else {
+            $templateName = 'login';
+            $argsArray = array(
+            'title' => 'Login',
+            'failed' => 'Please login to apply to this job.'
+        );
+            return $app['twig']->render($templateName . '.html.twig', $argsArray);
+        }
+    }
+
+    /**
+     * Lecturer accepts jobs they think is suitable for students
+     * @param Request $request
+     * @param Application $app
+     * @return mixed
+     */
+    public function acceptJobAction(Request $request, Application $app)
+    {
+        $isLoggedIn = $this->isLoggedInFromSession();
+        $username = $this->usernameFromSession();
+        $position = $this->positionFromSession();
+        $id = $request->get('id');
+
+        $acceptJob = Job::acceptOneById($id);
+        $jobs = Job::getOneByUsername($username);
+        $everyJob = Job::getAll();
+
+
+        if ($acceptJob == true) {
+            $templateName = 'account';
+            $argsArray = array(
+                'worked' => 'Job has been accepted successfully',
+                'isLoggedIn' => $isLoggedIn,
+                'username' => $username,
+                'position' => $position,
+                'jobs' => $jobs,
+                'everyJob' => $everyJob
+            );
+        } else {
+            $templateName = 'account';
+            $argsArray = array(
+                'failed' => 'Sorry job has not been accepted',
+                'isLoggedIn' => $isLoggedIn,
+                'username' => $username,
+                'position' => $position,
+                'jobs' => $jobs,
+                'everyJob' => $everyJob
+            );
+        }
+
+        return $app['twig']->render($templateName . '.html.twig', $argsArray);
+    }
+
+    /**
+     * students can apply for available jobs
+     * @param Request $request
+     * @param Application $app
+     * @return mixed
+     */
+    public function applyAction(Request $request, Application $app)
+    {
+        $isLoggedIn = $this->isLoggedInFromSession();
+        $username = $this->usernameFromSession();
+        $position = $this->positionFromSession();
+        $id = $request->get('id');
+        $alreadyApplied = $this->alreadyApplied($id);
+
+        if ($isLoggedIn) {
+            if ($alreadyApplied) {
+                $allJobs = Job::getAll();
+
+                $templateName = 'jobs';
+                $argsArray = array(
+                    'title' => "Our Job's",
+                    'jobs' => $allJobs,
+                    'isLoggedIn' => $isLoggedIn,
+                    'username' => $username,
+                    'position' => $position,
+                    'failed' => "You have applied for this job already!",
+                );
+                return $app['twig']->render($templateName . '.html.twig', $argsArray);
+            } else {
+                $applyJob = Applicants::apply($id, $username);
+
+                if ($applyJob == null) {
+                    $allJobs = Job::getAll();
+                    $appliedJob = Job::getOneById($id);
+                    $title = $appliedJob->getTitle();
+                    $company = $appliedJob->getCompany();
+
+                    $templateName = 'jobs';
+                    $argsArray = array(
+                        'title' => "Jobs",
+                        'jobs' => $allJobs,
+                        'isLoggedIn' => $isLoggedIn,
+                        'username' => $username,
+                        'position' => $position,
+                        'worked' => "Applied for $title at $company",
+                    );
+                    return $app['twig']->render($templateName . '.html.twig', $argsArray);
+                } else {
+                    $allJobs = Job::getAll();
+
+                    $templateName = 'jobs';
+                    $argsArray = array(
+                        'title' => "Jobs",
+                        'jobs' => $allJobs,
+                        'isLoggedIn' => $isLoggedIn,
+                        'username' => $username,
+                        'position' => $position,
+                        'failed' => 'Could not apply for job.',
+                    );
+                    return $app['twig']->render($templateName . '.html.twig', $argsArray);
+                }
+            }
+        } else {
+            $templateName = 'login';
+            $argsArray = array(
+                    'title' => 'Login',
+                    'failed' => 'Please login to apply to this job.'
+                );
+            return $app['twig']->render($templateName . '.html.twig', $argsArray);
+        }
+    }
+
+    /**
+     * returning if the user is logged in
+     * @return bool
+     */
+    public function isLoggedInFromSession()
+    {
+        $isLoggedIn = false;
+
+        // user is logged in if there is a 'user' entry in the SESSION superglobal
+        if (isset($_SESSION['user'])) {
+            $isLoggedIn = true;
+        }
+
+        return $isLoggedIn;
+    }
+
+    /**
+     * returning username if user is logged in
+     * @return string
+     */
+    public function usernameFromSession()
+    {
+        $username = '';
+
+        // extract username from SESSION superglobal
+        if (isset($_SESSION['user'])) {
+            $username = $_SESSION['user'];
+        }
+
+        return $username;
+    }
+
+    /**
+     * returning the position of the logged in user
+     * @return int
+     */
+    public function positionFromSession()
+    {
+        if (isset($_SESSION['user'])) {
+            $username = $this->usernameFromSession();
+            $user = User::getOneByUsername($username);
+            $position = $user->getPosition();
+        }
+        return intval($position);
+    }
+
+    /**
+     * returning to error page
+     * @param Application $app
+     * @param $message
+     * @param $heading
+     * @return mixed
+     */
+    public static function error(Application $app, $message, $heading)
+    {
+        $argsArray = [
+            'title' => 'ERROR',
+            'errorMessage' => $message,
+            'errorHeading' => $heading
+        ];
+        $templateName = 'error';
+        return $app['twig']->render($templateName . '.html.twig', $argsArray);
+    }
+
+    /**
+     * returning if the user has already applied for the job
+     * @param $id
+     * @return bool
+     */
+    public function alreadyApplied($id)
+    {
+        if (isset($_SESSION['user'])) {
+            $username = $this->usernameFromSession();
+            $application = Applicants::getApplicantsByUsernameAndId($id, $username);
+            if ($application!=null) {
+                $appliedAlready = true;
+            } else {
+                $appliedAlready = false;
+            }
+        }
+        return $appliedAlready;
+    }
+}
+

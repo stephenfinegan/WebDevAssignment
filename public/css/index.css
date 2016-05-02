@@ -1,17 +1,21 @@
+/*setting background colour of page*/
 body{
     background:#36b0b6;
     text-align: center;
 }
 
+/*displaying header one in center of page*/
 h1{
     text-align: center;
 }
 
+/*displaying heading three in center of page*/
 h3{
     text-align:center;
 }
 
-form{
+/*styling the input forms for login and register*/
+.inputForm{
     max-width: 350px;
     max-height:400px;
     margin:10px auto;
@@ -19,11 +23,30 @@ form{
     background: #f4f7f8;
     border-radius: 8px;
 }
+
+/*styling the cv form that student inputs*/
+.cvForm{
+    max-width: 350px;
+    max-height:995px;
+    margin:10px auto;
+    padding: 5px 10px;
+    background: #f4f7f8;
+    border-radius: 8px;
+}
+
+/*styling the buttons found at bottom of cv form*/
+.cvButtons{
+    display:inline-block;
+    margin-right:5px;
+}
+
+/*styling the forms*/
 input[type="text"],
 input[type="password"],
 input[type="radio"],
 textarea,
 
+/*styling the select options in forms*/
 select {
     border: none;
     font-size: 16px;
@@ -34,17 +57,20 @@ select {
     color: blue;
 }
 
+/*styling the select options in forms*/
 select {
     padding: 6px;
     height: 32px;
     border-radius: 2px;
 }
 
+/*setting dimensions for fieldsets*/
 fieldset {
     margin-bottom: 30px;
     border: none;
 }
 
+/*creating the style of footer found at bottom of every page*/
 footer {
     margin-top: 20px;
     width: 100%;
@@ -57,10 +83,33 @@ footer {
     text-align: center;
 }
 
+/*styling the fieldset around cv form*/
+.cvFieldset{
+    border:1px solid black;
+    width: 30%;
+    margin-left:35%;
+    margin-right:35%;
+
+}
+
+/*styling the label of the fieldset around cv form*/
+.cvFieldset label{
+    font-weight: bold;
+}
+
+
+/*setting size of text area in cv form*/
+#cvFormTextArea{
+    height: 100px;
+    resize:vertical;
+}
+
+/*setting size of job description text area*/
 #jobDescTextArea{
     height: 100px;
 }
 
+/*setting border around the table that display jobs*/
 #viewJobsTable{
     border: 1px solid black;
 }

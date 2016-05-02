@@ -5,19 +5,19 @@
  * Date: 13/04/2016
  * Time: 16:31
  */
+
+// autoload classes being used
 require_once __DIR__ . "/../vendor/autoload.php";
 require_once __DIR__ . '/config_db.php';
-require_once __DIR__ . "/../src/Utility.php";
+require_once __DIR__ . "/../src/utility/Utility.php";
 
+//twig set up
 $myTemplatesPath = __DIR__ . "/../templates";
 
-$loader = new Twig_Loader_Filesystem($myTemplatesPath);
-
-$twig = new Twig_Environment($loader);
-
+//silex setup
 $app = new Silex\Application();
-$app['debug']=true;
 
+// register twig with silex
 $app->register(new Silex\Provider\TwigServiceProvider(), array(
     'twig.path' => $myTemplatesPath
 ));

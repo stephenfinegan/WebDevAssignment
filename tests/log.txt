@@ -1,0 +1,12 @@
+TAP version 13
+not ok 1 - Error: StephenFineganTests\CVTest::testCreateObject
+not ok 2 - Error: StephenFineganTests\CVTest::testSetGetFirstName
+not ok 3 - Error: StephenFineganTests\CVTest::testSetGetSecondName
+not ok 4 - Error: StephenFineganTests\CVTest::testSetGetEmail
+not ok 5 - Error: StephenFineganTests\CVTest::testSetGetNumber
+not ok 6 - Error: StephenFineganTests\CVTest::testSetGetPicture
+not ok 7 - Error: StephenFineganTests\CVTest::testSetGetAddress
+not ok 8 - Error: StephenFineganTests\CVTest::testTown
+not ok 9 - Error: StephenFineganTests\CVTest::testSetGetPreviousJobs
+not ok 10 - Error: StephenFineganTests\CVTest::testSetGetQualifications
+1..10

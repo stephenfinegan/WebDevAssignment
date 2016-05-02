@@ -6,16 +6,31 @@
  * Time: 17:10
  */
 
-namespace StephenFinegan\Controllers;
+/**
+ * namespace for main controller
+ */
+namespace StephenFinegan\controllers;
 
 use StephenFinegan\Models\User;
 use StephenFinegan\Models\Job;
+use StephenFinegan\Models\Applicants;
+use StephenFinegan\Models\CV;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 
+/**
+ * Class MainController
+ * @package StephenFinegan\controllers
+ */
 class MainController
 {
 
+    /**
+     * sends user to index page
+     * @param Request $request
+     * @param Application $app
+     * @return mixed
+     */
     public function indexAction(Request $request, Application $app)
     {
         $isLoggedIn = $this->isLoggedInFromSession();
@@ -32,7 +47,14 @@ class MainController
         return $app['twig']->render($templateName . '.html.twig', $argsArray);
     }
 
-    public function registerAction(Request $request, Application $app){
+    /**
+     * sends user to register page
+     * @param Request $request
+     * @param Application $app
+     * @return mixed
+     */
+    public function registerAction(Request $request, Application $app)
+    {
         $isLoggedIn = $this->isLoggedInFromSession();
         $username = $this->usernameFromSession();
         $argsArray = [
@@ -45,7 +67,13 @@ class MainController
         return $app['twig']->render($templateName . '.html.twig', $argsArray);
     }
 
-    public function loginAction(Application $app){
+    /**
+     * sends user to login page
+     * @param Application $app
+     * @return mixed
+     */
+    public function loginAction(Application $app)
+    {
         $isLoggedIn = $this->isLoggedInFromSession();
         $argsArray = [
             'title' => 'Login',
@@ -56,6 +84,12 @@ class MainController
         return $app['twig']->render($templateName . '.html.twig', $argsArray);
     }
 
+    /**
+     * sends user to the jobs page
+     * @param Request $request
+     * @param Application $app
+     * @return mixed
+     */
     public function jobsAction(Request $request, Application $app)
     {
         $isLoggedIn = $this->isLoggedInFromSession();
@@ -75,6 +109,35 @@ class MainController
         return $app['twig']->render($templateName . '.html.twig', $argsArray);
     }
 
+    /**
+     * sending user to the student page
+     * @param Request $request
+     * @param Application $app
+     * @return mixed
+     */
+    public function studentAction(Request $request, Application $app)
+    {
+        $isLoggedIn = $this->isLoggedInFromSession();
+        $username = $this->usernameFromSession();
+
+        $allCVS = CV::getAll();
+
+        $templateName = 'studentCVS';
+        $argsArray = array(
+            'title' => "List of student cvs",
+            'isLoggedIn' => $isLoggedIn,
+            'username' => $username,
+            'cvs' => $allCVS
+        );
+        return $app['twig']->render($templateName . '.html.twig', $argsArray);
+    }
+
+    /**
+     * sending user to the account page
+     * @param Request $request
+     * @param Application $app
+     * @return mixed
+     */
     public function accountAction(Request $request, Application $app)
     {
         $isLoggedIn = $this->isLoggedInFromSession();
@@ -82,10 +145,14 @@ class MainController
         $position = $this->positionFromSession();
 
         $allJobs = Job::getAll();
+        $allCVS = CV::getAll();
+        $allSampleCVS = CV::getAllSampleCVS();
 
         $argsArray = [
             'title' => 'Account',
             'jobs' => $allJobs,
+            'samplecvs' => $allSampleCVS,
+            'cvs' => $allCVS,
             'isLoggedIn' => $isLoggedIn,
             'username' => $username,
             'position' => $position
@@ -96,6 +163,12 @@ class MainController
         return $app['twig']->render($templateName . '.html.twig', $argsArray);
     }
 
+    /**
+     * sending user to the logout page
+     * @param Request $request
+     * @param Application $app
+     * @return mixed
+     */
     public function logoutAction(Request $request, Application $app)
     {
         // logout user
@@ -111,15 +184,22 @@ class MainController
         return $app['twig']->render($templateName . '.html.twig', $argsArray);
     }
 
-   public function processLoginAction(Request $request, Application $app){
-       $username = $request->get('username');
-       $password = $request->get('password');
+    /**
+     * processing the login
+     * @param Request $request
+     * @param Application $app
+     * @return mixed
+     */
+    public function processLoginAction(Request $request, Application $app)
+    {
+        $username = $request->get('username');
+        $hashedPassword = $request->get('hashedPassword');
 
        // search for user with username in repository
-       $isLoggedIn = User::canFindMatchingUsernameAndPassword($username, $password);
+       $isLoggedIn = User::canFindMatchingUsernameAndPassword($username, $hashedPassword);
 
        // action depending on login success
-       if($isLoggedIn) {
+       if ($isLoggedIn) {
            // STORE login status SESSION
            $_SESSION['user'] = $username;
 
@@ -132,7 +212,7 @@ class MainController
               );
 
            return $app['twig']->render($templateName . '.html.twig', $argsArray);
-       }else {
+       } else {
            $templateName = 'login';
 
            $argsArray = array(
@@ -143,24 +223,31 @@ class MainController
 
            return $app['twig']->render($templateName . '.html.twig', $argsArray);
        }
-   }
+    }
 
-    public function registerUserAction(Request $request, Application $app){
+    /**
+     * processing the register of user
+     * @param Request $request
+     * @param Application $app
+     * @return mixed
+     */
+    public function registerUserAction(Request $request, Application $app)
+    {
         $firstname = $request->get('firstname');
         $surname = $request->get('surname');
         $username = $request->get('username');
-        $password = $request->get('password');
+        $hashedPassword = $request->get('hashedPassword');
         $position = $request->get('position');
 
-        if($position == '1'){
+        if ($position == '1') {
             $makePosition = User::POSITION_1;
-        }elseif($position == '2'){
+        } elseif ($position == '2') {
             $makePosition = User::POSITION_2;
-        }else{
+        } else {
             $makePosition = User::POSITION_3;
         }
 
-        User::insert($firstname, $surname, $username, $password, $makePosition);
+        User::insert($firstname, $surname, $username, $hashedPassword, $makePosition);
 
         $templateName = 'index';
         $argsArray = [
@@ -174,18 +261,26 @@ class MainController
         return $app['twig']->render($templateName . '.html.twig', $argsArray);
     }
 
+    /**
+     * returning if the user is logged in
+     * @return bool
+     */
     public function isLoggedInFromSession()
     {
         $isLoggedIn = false;
 
         // user is logged in if there is a 'user' entry in the SESSION superglobal
-        if(isset($_SESSION['user'])){
+        if (isset($_SESSION['user'])) {
             $isLoggedIn = true;
         }
 
         return $isLoggedIn;
     }
 
+    /**
+     * returns the username of the user
+     * @return string
+     */
     public function usernameFromSession()
     {
         $username = '';
@@ -198,6 +293,10 @@ class MainController
         return $username;
     }
 
+    /**
+     * returns the position of the user
+     * @return int
+     */
     public function positionFromSession()
     {
         if (isset($_SESSION['user'])) {
@@ -207,6 +306,14 @@ class MainController
         }
         return intval($position);
     }
+
+    /**
+     * sending user to error page if error is found
+     * @param Application $app
+     * @param $message
+     * @param $heading
+     * @return mixed
+     */
     public static function error(Application $app, $message, $heading)
     {
         $argsArray = [
@@ -217,5 +324,4 @@ class MainController
         $templateName = 'error';
         return $app['twig']->render($templateName . '.html.twig', $argsArray);
     }
-
 }

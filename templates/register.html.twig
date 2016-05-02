@@ -8,13 +8,13 @@
     </h1>
     <hr color="black">
     <fieldset class="registerFieldset">
-        <form id="registrationForm" method="post" action="/registerForm">
+        <form class="inputForm" method="post" action="/registerForm">
             <h3>Register Form</h3>
 
             <label>FIRST NAME</label> <input type="text" name="firstname" id="firstname" required>
             <label>SURNAME</label> <input type="text" name="surname" id="surname" required>
             <label>USERNAME</label> <input type="text" name="username" id="username" required>
-            <label>PASSWORD</label> <input type="password" name="password" id="password" required>
+            <label>PASSWORD</label> <input type="password" name="hashedPassword" id="password" required>
             <label>POSITION</label>
             <select name="position" id="position">
                 <option value="1">Student</option>

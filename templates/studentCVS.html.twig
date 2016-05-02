@@ -1,0 +1,42 @@
+{% extends '_base.html.twig' %}
+
+{% block pageTitle %}{{ title }}{% endblock %}
+
+{% block main %}
+    <h1>
+        CVS!
+    </h1>
+    <hr color="black">
+    <h3>View all students CV's</h3>
+    {% for cv in cvs %}
+            <table align="center" border="1px">
+                <tr>
+                    <th>Firstname</th>
+                    <th>Surname</th>
+                    <th>Email</th>
+                    <th>Number</th>
+                    <th>Picture</th>
+                    <th>Address</th>
+                    <th>Town</th>
+                    <th>Previous Jobs</th>
+                    <th>Qualifications</th>
+                </tr>
+                <tr>
+                    <td>{{ cv.firstname }}</td>
+                    <td>{{ cv.surname }}</td>
+                    <td>{{ cv.email }}</td>
+                    <td>{{ cv.number }}</td>
+                    <td>{{ cv.picture }}</td>
+                    <td>{{ cv.address }}</td>
+                    <td>{{ cv.town }}</td>
+                    <td>{{ cv.previousJobs }}</td>
+                    <td>{{ cv.qualifications }}</td>
+                </tr>
+            </table>
+
+            <label>
+                Comments:
+            </label>
+        <br>
+    {% endfor %}
+{% endblock %}

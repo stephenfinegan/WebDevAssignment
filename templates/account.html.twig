@@ -11,7 +11,7 @@
     {% if position == 3 %}
 
         <fieldset class="registerFieldset">
-            <form id="jobForm" method="post" action="/jobForm">
+            <form class="inputForm" id="jobForm" method="post" action="/jobForm">
                 <h1>Enter job information</h1>
                 <input type="text" name="company" placeholder="COMPANY" required>
                 <br>
@@ -32,12 +32,15 @@
         <hr>
         <h3>Available jobs</h3>
         {% for job in jobs %}
+
+            {% if job.accepted == 1 %}
             <table id="viewJobsTable" align="center" id="viewJobsTable" border="1px">
         <tr>
             <th> Company </th>
             <th> Title </th>
             <th> Description </th>
             <th> Deadline </th>
+            <th> Accepted </th>
         </tr>
 
             <tr>
@@ -47,14 +50,40 @@
                 <td> {{ job.deadline }} </td>
                 <td>
                         <form action="/deleteJob" method="post">
+                            <input type="hidden" name="id" value="{{ job.id }}">
                             <input type="submit" value="Delete Job">
-                            <input type="hidden" value="{{ job.id }}" name="id">
                         </form>
                 </td>
             </tr>
         </table>
         <br>
         <br>
+                {% else %}
+                    <table id="viewJobsTable" align="center" id="viewJobsTable" border="1px">
+                        <tr>
+                            <th> Company </th>
+                            <th> Title </th>
+                            <th> Description </th>
+                            <th> Deadline </th>
+                            <th> Not Accepted </th>
+                        </tr>
+
+                        <tr>
+                            <td> {{ job.company }} </td>
+                            <td> {{ job.title }} </td>
+                            <td> {{ job.description }} </td>
+                            <td> {{ job.deadline }} </td>
+                            <td>
+                                <form action="/deleteJob" method="post">
+                                    <input type="hidden" name="id" value="{{ job.id }}">
+                                    <input type="submit" value="Delete Job">
+                                </form>
+                            </td>
+                        </tr>
+                    </table>
+                    <br>
+                    <br>
+                {% endif %}
         {% else %}
             There are no jobs
             <br>
@@ -62,8 +91,155 @@
         {% endfor %}
 
     {% elseif position == 1 %}
+        {% for cv in samplecvs %}
+            <form action="/processCVForm" class="cvForm" method="post" >
+                <h2>Curriculum vitae</h2>
+                    <label>Firstname </label>
+                        <input type="text" name="firstname" value="{{ cv.firstname }}"/>
+                    <br>
+                    <label>Surname</label>
+                        <input type="text" name="surname" value="{{ cv.surname }}"/>
+                    <br>
+                    <label>Email </label>
+                        <input type="text" name="email" value="{{ cv.email }}"/>
+                    <br>
+                    <label>Number </label>
+                        <input type="text" name="phoneNumber" value="{{ cv.number }}"/>
+                    <br>
+                    <br>
+                    <label>Picture</label>
+                        <input name="picture" type="file" value=""/>
+                    <br>
+                    <br>
+                    <label>Address </label>
+                        <input type="text" name="address" value="{{ cv.address }}"/>
+                    <br>
+                    <label>Town</label>
+                        <input value="{{ cv.town }}" name="town" type="text">
+                    <br>
+                    <label>Previous Jobs</label>
+                        <textarea id="cvFormTextArea" name="previousJobs">{{ cv.previousJobs }}</textarea>
+                    <br>
+                    <label>Qualifications</label>
+                        <textarea id="cvFormTextArea" name="qualifications">{{ cv.qualifications }}</textarea>
+                    <br>
+                    <button type="submit">Save</button>
+            </form>
+            <br>
+            <br>
+        {% endfor %}
 
     {% else %}
+        {% for job in jobs %}
+            {% if job.accepted == 1 %}
+                <h3>Accepted Job</h3>
+                <table id="viewJobsTable" align="center" id="viewJobsTable" border="1px">
+                    <tr>
+                        <th> Company </th>
+                        <th> Title </th>
+                        <th> Description </th>
+                        <th> Deadline </th>
+                    </tr>
 
+                    <tr>
+                        <td> {{ job.company }} </td>
+                        <td> {{ job.title }} </td>
+                        <td> {{ job.description }} </td>
+                        <td> {{ job.deadline }} </td>
+                        <td>
+                            <form action="/deleteJob" method="post">
+                                <input type="hidden" name="id" value="{{ job.id }}">
+                                <input type="submit" value="Delete Job">
+                            </form>
+                        </td>
+                    </tr>
+                </table>
+                <br>
+            {% else %}
+                <h3>Non Accepted Job</h3>
+                <table id="viewJobsTable" align="center" id="viewJobsTable" border="1px">
+                    <tr>
+                        <th> Company </th>
+                        <th> Title </th>
+                        <th> Description </th>
+                        <th> Deadline </th>
+                    </tr>
+                    <tr>
+                        <td> {{ job.company }} </td>
+                        <td> {{ job.title }} </td>
+                        <td> {{ job.description }} </td>
+                        <td> {{ job.deadline }} </td>
+                        <td>
+                                <form action="/deleteJob" method="post">
+                                    <input type="hidden" name="id" value="{{ job.id }}">
+                                    <input type="submit" value="Delete Job">
+                                </form>
+                            <br>
+                                <form action="/acceptJob" method="post">
+                                    <input type="hidden" name="id" value="{{ job.id }}">
+                                    <input type="submit" value="Accept Job">
+                                </form>
+                        </td>
+                    </tr>
+                 </table>
+                <br>
+            {% endif %}
+        {% endfor %}
+
+        <hr>
+        <h2>All CV's</h2>
+        {% if cvs == null %}
+            <p>
+                No cv's available
+            </p>
+        {% else %}
+            <h3>Send a message to all students</h3>
+                <form action="/sendMessage" method="post">
+                    <textarea name="message" style="height: 100px; width:500px"></textarea>
+                    <br>
+                    <br>
+                    <input type="hidden" name="sendTo" value="0">
+                    <input type="submit" value="Send">
+                </form>
+            <br>
+            <br>
+            {% for cv in cvs %}
+                <table align="center" border="1px">
+                    <tr>
+                        <th>Firstname</th>
+                        <th>Surname</th>
+                        <th>Email</th>
+                        <th>Number</th>
+                        <th>Picture</th>
+                        <th>Address</th>
+                        <th>Town</th>
+                        <th>Previous Jobs</th>
+                        <th>Qualifications</th>
+                        <th>Comment</th>
+                    </tr>
+                    <tr>
+                        <td>{{ cv.firstname }}</td>
+                        <td>{{ cv.surname }}</td>
+                        <td>{{ cv.email }}</td>
+                        <td>{{ cv.number }}</td>
+                        <td>{{ cv.picture }}</td>
+                        <td>{{ cv.address }}</td>
+                        <td>{{ cv.town }}</td>
+                        <td>{{ cv.previousJobs }}</td>
+                        <td>{{ cv.qualifications }}</td>
+                        <td>
+                            <form method="post">
+                                <input type="hidden" name="id" value="{{ cv.id }}">
+                                <input type="submit" value="Comment" formaction="/messageTo/{{ cv.username }}" class="actionBtn">
+                            </form>
+                        </td>
+                    </tr>
+                </table>
+
+
+
+                <br>
+            {% endfor %}
+        {% endif %}
     {% endif %}
 {% endblock %}

@@ -12,6 +12,8 @@ return array(
     'Symfony\\Component\\HttpFoundation\\' => array($vendorDir . '/symfony/http-foundation'),
     'Symfony\\Component\\EventDispatcher\\' => array($vendorDir . '/symfony/event-dispatcher'),
     'Symfony\\Component\\Debug\\' => array($vendorDir . '/symfony/debug'),
+    'StephenFinegan\\Models\\' => array($baseDir . '/src/models'),
+    'StephenFinegan\\Controllers\\' => array($baseDir . '/src/controllers'),
     'StephenFinegan\\' => array($baseDir . '/src'),
     'Silex\\' => array($vendorDir . '/silex/silex/src/Silex'),
     'Mattsmithdev\\PdoCrud\\' => array($vendorDir . '/mattsmithdev/pdo-crud-for-free/src'),

@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<dataset name="test_assignment">
+    <!-- Table for cvs -->
+    <table name="cvs">
+        <column name="id">id</column>
+        <column name="firstname">firstname</column>
+        <column name="surname">surname</column>
+        <column name="email">email</column>
+        <column name="number">number</column>
+        <column name="picture">picture</column>
+        <column name="address">address</column>
+        <column name="town">town</column>
+        <column name="previousJobs">previousJobs</column>
+        <column name="qualifications">qualifications</column>
+
+        <row name = "cvs">
+            <value name="id">1</value>
+            <value name="firstname">stephen</value>
+            <value name="surname">finegan</value>
+            <value name="email">finegan@gmail.com</value>
+            <value name="number">012345</value>
+            <value name="picture">finegan.jpg</value>
+            <value name="address">10 fairways</value>
+            <value name="town">finglas</value>
+            <value name="previousJobs">spar</value>
+            <value name="qualifications">programmer</value>
+        </row>
+    </table>
+</dataset>
